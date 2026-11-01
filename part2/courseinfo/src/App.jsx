@@ -16,9 +16,9 @@ const Part = ({part}) => (
 )
 
 
-const Total = ({exercises}) => {
-  const total = exercises.reduce(
-    (sum, exercise) => sum + exercise,0
+const Total = ({parts}) => {
+  const total = parts.reduce(
+    (sum, part) => sum + part.exercises,0
   )
   return (
   <p><strong>total of {total} exercises</strong></p>
@@ -55,7 +55,7 @@ const App = () => {
   return (
     <div>
       <Course course={course}/>
-      <Total exercises={course.parts.map(part => part.exercises)}/>
+      <Total parts={course.parts}/>
     </div>
   )
 }
