@@ -21,7 +21,7 @@ const Total = ({exercises}) => {
     (sum, exercise) => sum + exercise,0
   )
   return (
-  <p>Number of exercises {total}</p>
+  <p><strong>total of {total} exercises</strong></p>
 )
 }
 
