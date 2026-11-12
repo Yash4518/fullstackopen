@@ -1,4 +1,4 @@
-import axios from 'axios'
+import personService from './services/server'
 import { useState, useEffect } from 'react'
 import Filter from './Filter'
 import Persons from './Persons'
@@ -11,10 +11,13 @@ const App = () => {
   const [filter, setFilter] = useState('')
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        setPersons(response.data)
+    personService
+      .getAll()
+      .then(initialPersons => {
+        setPersons(initialPersons)
+      })
+      .catch(error => {
+        console.log('Error fetching persons:', error)
       })
   },[])
 
@@ -34,13 +37,31 @@ const App = () => {
       number: newNumber,
     }
 
-    axios
-      .post('http://localhost:3001/persons', newPersonObject)
-      .then(response => {
-        setPersons(persons.concat(response.data))
+    personService
+      .create(newPersonObject)
+      .then(returnedPerson => {
+        setPersons(persons.concat(returnedPerson))
         setNewName('')
         setNewNumber('')
       })
+      .catch(error => {
+        console.log('Error adding person:', error)
+      })
+  }
+
+  const deletePerson = (id) => {
+    const person = persons.find(p => p.id === id)
+    
+    if (window.confirm(`Delete ${person.name}?`)) {
+      personService
+        .remove(id)
+        .then(() => {
+          setPersons(persons.filter(p => p.id !== id))
+        })
+        .catch(error => {
+          console.log('Error deleting person:', error)
+        })
+    }
   }
 
   const filteredPersons = persons.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
@@ -56,7 +77,7 @@ const App = () => {
       setNewNumber={setNewNumber} addPerson={addPerson}/>
 
       <h2>Numbers</h2>
-      <Persons persons={filteredPersons} />
+      <Persons persons={filteredPersons} deletePerson={deletePerson} />
 
     </div>
   )
