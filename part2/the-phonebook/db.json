@@ -19,6 +19,31 @@
       "name": "Mary Poppendieck",
       "number": "39-23-6423122",
       "id": "4"
+    },
+    {
+      "name": "Mellisa Cooper",
+      "number": "457733-6373883",
+      "id": "Fh0jgccsZw4"
+    },
+    {
+      "name": "Gorgie Cooper",
+      "number": "12546672-9873",
+      "id": "60WYXRNi9Zw"
+    },
+    {
+      "name": "Sheldon Cooper",
+      "number": "356728-8353",
+      "id": "DIzWk5s1MmU"
+    },
+    {
+      "name": "Mndy Maccalister",
+      "number": "33425563-746782",
+      "id": "UjrPP8TAgho"
+    },
+    {
+      "name": "Peter Parker",
+      "number": "3547383-4683",
+      "id": "IjFdtz0gmrg"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
