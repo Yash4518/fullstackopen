@@ -3,12 +3,16 @@ import { useState, useEffect } from 'react'
 import Filter from './Filter'
 import Persons from './Persons'
 import PersonForm from './PersonForm'
+import Notification from './Notification'
+import './index.css'
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
+  const [notification, setNotification] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
     personService
@@ -37,11 +41,18 @@ const App = () => {
                 person.id === updatedPerson.id ? updatedPerson : person
               )
             )
+            showNotification(`Updated ${updatedPerson.name}`)
             setNewName('')
             setNewNumber('')
           })
           .catch(error => {
-            console.log('Error updating person:', error)
+            showError(
+              `Information of ${existingPerson.name} has already been removed from server`
+            )
+            
+            setPersons(previousPersons => 
+              previousPersons.filter(p => p.id !== existingPerson.id)
+            )
           })
       }
 
@@ -57,6 +68,7 @@ const App = () => {
       .create(newPersonObject)
       .then(returnedPerson => {
         setPersons(previousPersons => previousPersons.concat(returnedPerson))
+        showNotification(`Added ${returnedPerson.name}`)
         setNewName('')
         setNewNumber('')
       })
@@ -81,11 +93,29 @@ const App = () => {
     }
   }
 
+  const showNotification = (message) => {
+    setNotification(message)
+
+    setTimeout(() => {
+      setNotification(null)
+    }, 5000)
+  }
+
+  const showError = (message) => {
+    setErrorMessage(message)
+
+    setTimeout(() => {
+      setErrorMessage(null)
+    }, 5000)
+  }
+
   const filteredPersons = persons.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
 
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notification} type="notification"/>
+      <Notification message={errorMessage} type="error" />
       <Filter filter={filter} onFilterChange={(event) => setFilter(event.target.value)} />
         
       <h3>Add a new</h3>
